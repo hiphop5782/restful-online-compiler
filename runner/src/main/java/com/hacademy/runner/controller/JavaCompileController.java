@@ -20,13 +20,11 @@ public class JavaCompileController {
 	@Autowired
 	private JavaCompileService javaCompileService;
 	
-	@CrossOrigin(origins="*")
 	@PostMapping("/simple")
 	public String compileWithoutMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		return javaCompileService.compileAndExecuteWithoutMainMethod(sourceVO);
 	}
 
-	@CrossOrigin(origins="*")
 	@PostMapping("/main")
 	public String compileWithMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		return javaCompileService.compileAndExecuteWithMainMethod(sourceVO);
