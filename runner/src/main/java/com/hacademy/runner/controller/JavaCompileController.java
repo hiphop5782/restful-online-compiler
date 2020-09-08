@@ -13,8 +13,6 @@ import com.hacademy.runner.entity.JavaSourceVO;
 import com.hacademy.runner.exception.CodeCompileException;
 import com.hacademy.runner.service.JavaCompileService;
 
-@CrossOrigin(origins="*")
-//@CrossOrigin(origins= {"http://www.sysout.co.kr", "http://localhost/"})
 @RestController
 @RequestMapping("/java")
 public class JavaCompileController {
@@ -22,11 +20,13 @@ public class JavaCompileController {
 	@Autowired
 	private JavaCompileService javaCompileService;
 	
+	@CrossOrigin(origins="*")
 	@PostMapping("/simple")
 	public String compileWithoutMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		return javaCompileService.compileAndExecuteWithoutMainMethod(sourceVO);
 	}
-	
+
+	@CrossOrigin(origins="*")
 	@PostMapping("/main")
 	public String compileWithMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		return javaCompileService.compileAndExecuteWithMainMethod(sourceVO);
