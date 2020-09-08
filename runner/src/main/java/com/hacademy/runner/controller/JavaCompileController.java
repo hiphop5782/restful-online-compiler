@@ -13,7 +13,7 @@ import com.hacademy.runner.entity.JavaSourceVO;
 import com.hacademy.runner.exception.CodeCompileException;
 import com.hacademy.runner.service.JavaCompileService;
 
-@CrossOrigin("*")
+@CrossOrigin(origins="*")
 //@CrossOrigin(origins= {"http://www.sysout.co.kr", "http://localhost/"})
 @RestController
 @RequestMapping("/java")
