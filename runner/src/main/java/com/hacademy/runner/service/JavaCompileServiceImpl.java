@@ -6,6 +6,8 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -31,16 +33,7 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 	private GenerateStringService gsService;
 	
 	@Override
-	public String simpleCompile(JavaSourceVO sourceVO) throws IOException, CodeCompileException {
-		//create java compiler
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		
-		//create diagnostic listener(특수 증상 기록도구) 생성
-		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-		
-		//java file manager(현재 없어도 됨)
-		JavaFileManager manager = compiler.getStandardFileManager(diagnostics, Locale.KOREA, Charset.forName("UTF-8"));
-
+	public String compileWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException {
 		//generate class name
 		String className = gsService.generateTestClassName(20);
 		
@@ -56,11 +49,45 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 		buffer.append("}\n");
 		buffer.append("}");
 		
+		sourceVO.setCode(buffer.toString());
+		
+		return compileWithMainMethod(sourceVO);
+	}
+
+	@Override
+	public String execute(String className) throws IOException, InterruptedException {
+		String javaHome = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java.exe";
+		String[] command = new String[] {javaHome, className};
+		return runner.byProcessBuilderOnDelete(command, className);
+	}
+
+	@Override
+	public String compileAndExecuteWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
+		// TODO Auto-generated method stub
+		return execute(compileWithoutMainMethod(sourceVO));
+	}
+
+	@Override
+	public String compileWithMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException {
+		//create java compiler
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		
+		//create diagnostic listener(특수 증상 기록도구) 생성
+		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+		
+		//java file manager(현재 없어도 됨)
+		JavaFileManager manager = compiler.getStandardFileManager(diagnostics, Locale.KOREA, Charset.forName("UTF-8"));
+
+		//find class name
+		Matcher matcher = Pattern.compile("public\\s+class\\s+(\\w+)\\s*\\{").matcher(sourceVO.getCode());
+		matcher.find();
+		String className = matcher.group(1);
+		
 		//string writer for receive compile output message
 		StringWriter writer = new StringWriter();
 		
 		//compile object list
-		List<? extends JavaFileObject> srcList = List.of(new JavaSourceCodeObject(className, buffer.toString()));
+		List<? extends JavaFileObject> srcList = List.of(new JavaSourceCodeObject(className, sourceVO.getCode()));
 		
 		//compile option list
 		List<String> options = List.of("-d", "./src/main/resources/compile");
@@ -88,16 +115,9 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 	}
 
 	@Override
-	public String execute(String className) throws IOException, InterruptedException {
-		String javaHome = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java.exe";
-		String[] command = new String[] {javaHome, className};
-		return runner.byProcessBuilderOnDelete(command, className);
-	}
-
-	@Override
-	public String simpleCompileAndExecute(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
-		// TODO Auto-generated method stub
-		return execute(simpleCompile(sourceVO));
+	public String compileAndExecuteWithMainMethod(JavaSourceVO sourceVO)
+			throws IOException, InterruptedException, CodeCompileException {
+		return execute(compileWithMainMethod(sourceVO));
 	}
 
 
