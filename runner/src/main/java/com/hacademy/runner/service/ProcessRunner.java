@@ -52,8 +52,10 @@ public class ProcessRunner {
 	public void copy(InputStream input, StringWriter writer) throws IOException {
 		char[] buffer = new char[1024];
 		try (Reader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"))) {
-			int n;
-			while ((n = reader.read(buffer)) != -1) {
+			while (true) {
+				int n = reader.read(buffer);
+				log.debug("read = {}", n);
+				if(n == -1) break;
 				writer.write(buffer, 0, n);
 			}
 		}
