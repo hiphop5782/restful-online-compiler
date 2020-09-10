@@ -33,7 +33,7 @@ public class ProcessRunner {
 		builder.directory(baseDirectory);
 		Process process = builder.start();
 		log.debug("builder base dir = {}, {}", builder.directory().getAbsolutePath(), builder.directory().exists());
-		log.debug("class exist : {}", new File(builder.directory().getAbsoluteFile(), command[1]).exists());
+		log.debug("class exist : {}", new File(builder.directory().getAbsoluteFile(), command[1]+".java").exists());
 		log.debug("command = {}", builder.command());
 		return printStream(process);
 	}
