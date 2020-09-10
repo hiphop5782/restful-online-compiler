@@ -2,6 +2,7 @@ package com.hacademy.runner.service;
 
 import java.io.IOException;
 
+import com.hacademy.runner.entity.JavaResultVO;
 import com.hacademy.runner.entity.JavaSourceVO;
 import com.hacademy.runner.exception.CodeCompileException;
 
@@ -14,10 +15,10 @@ public interface JavaCompileService {
 	 * @throws IOException 입출력 예외
 	 * @throws CodeCompileException 컴파일 예외
 	 */
-	String compileWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException;
-	String execute(String className) throws IOException, InterruptedException;
-	String compileAndExecuteWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException;
+	JavaResultVO compileWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException;
+	JavaResultVO execute(JavaResultVO resultVO) throws IOException, InterruptedException;
+	JavaResultVO compileAndExecuteWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException;
 	
-	String compileWithMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException;
-	String compileAndExecuteWithMainMethod(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException;
+	JavaResultVO compileWithMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException;
+	JavaResultVO compileAndExecuteWithMainMethod(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException;
 }

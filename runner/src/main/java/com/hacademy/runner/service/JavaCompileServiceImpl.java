@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -19,6 +20,7 @@ import javax.tools.ToolProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hacademy.runner.entity.JavaResultVO;
 import com.hacademy.runner.entity.JavaSourceVO;
 import com.hacademy.runner.exception.CodeCompileException;
 import com.hacademy.runner.unit.JavaSourceCodeObject;
@@ -33,7 +35,7 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 	private GenerateStringService gsService;
 	
 	@Override
-	public String compileWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException {
+	public JavaResultVO compileWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException {
 		//generate class name
 		String className = gsService.generateTestClassName(20);
 		
@@ -55,20 +57,30 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 	}
 
 	@Override
-	public String execute(String className) throws IOException, InterruptedException {
+	public JavaResultVO execute(JavaResultVO resultVO) throws IOException, InterruptedException {
 		String javaHome = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java.exe";
-		String[] command = new String[] {javaHome, className};
-		return runner.byProcessBuilderOnDelete(command, className);
+		String[] command = new String[] {javaHome, resultVO.getClassName()};
+		
+		//check time
+		resultVO.setExecuteTime(LocalDateTime.now());
+		
+		//check elapsed time
+		long start = System.currentTimeMillis();
+		String result = runner.byProcessBuilderOnDelete(command, resultVO.getClassName());
+		long finish = System.currentTimeMillis();
+		resultVO.setResult(result);
+		resultVO.setExecuteElapsed(finish - start);
+		return resultVO;
 	}
 
 	@Override
-	public String compileAndExecuteWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
+	public JavaResultVO compileAndExecuteWithoutMainMethod(JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		// TODO Auto-generated method stub
 		return execute(compileWithoutMainMethod(sourceVO));
 	}
 
 	@Override
-	public String compileWithMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException {
+	public JavaResultVO compileWithMainMethod(JavaSourceVO sourceVO) throws IOException, CodeCompileException {
 		//create java compiler
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		
@@ -93,7 +105,10 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 		List<String> options = List.of("-d", "./src/main/resources/compile");
 		
 		//compile task
+		LocalDateTime compileTime = LocalDateTime.now();
+		long start = System.currentTimeMillis();
 		JavaCompiler.CompilationTask task = compiler.getTask(writer, manager, diagnostics, options, null, srcList);
+		long finish = System.currentTimeMillis();
 		
 		//throw error if task fail
 		if(!task.call()) {
@@ -110,12 +125,17 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 		//manager close
 		manager.close();
 		
-		//return class name
-		return className;
+		//return result data
+		return JavaResultVO.builder()
+												.code(sourceVO.getCode())
+												.className(className)
+												.compileTime(compileTime)
+												.compileElapsed(finish - start)
+											.build();
 	}
 
 	@Override
-	public String compileAndExecuteWithMainMethod(JavaSourceVO sourceVO)
+	public JavaResultVO compileAndExecuteWithMainMethod(JavaSourceVO sourceVO)
 			throws IOException, InterruptedException, CodeCompileException {
 		return execute(compileWithMainMethod(sourceVO));
 	}
