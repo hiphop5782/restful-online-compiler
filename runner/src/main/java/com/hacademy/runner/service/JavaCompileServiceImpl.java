@@ -25,6 +25,9 @@ import com.hacademy.runner.entity.JavaSourceVO;
 import com.hacademy.runner.exception.CodeCompileException;
 import com.hacademy.runner.unit.JavaSourceCodeObject;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class JavaCompileServiceImpl implements JavaCompileService{
 
@@ -126,12 +129,14 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 		manager.close();
 		
 		//return result data
-		return JavaResultVO.builder()
+		JavaResultVO resultVO = JavaResultVO.builder()
 												.code(sourceVO.getCode())
 												.className(className)
 												.compileTime(compileTime)
 												.compileElapsed(finish - start)
 											.build();
+		log.info("compile result = {}", resultVO);
+		return resultVO;
 	}
 
 	@Override
