@@ -33,7 +33,7 @@ public class ProcessRunner {
 		builder.directory(baseDirectory);
 		Process process = builder.start();
 		log.debug("builder base dir = {}, {}", builder.directory().getAbsolutePath(), builder.directory().exists());
-		log.debug("command = {}", Arrays.deepToString(command));
+		log.debug("command = {}", builder.command());
 		return printStream(process);
 	}
 	
@@ -58,7 +58,6 @@ public class ProcessRunner {
 				copy(pserr, writer);
 			}
 		}
-		log.debug("printStream = {}", writer.toString());
 		return writer.toString();
 	}
 
@@ -67,7 +66,6 @@ public class ProcessRunner {
 		try (Reader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"))) {
 			while (true) {
 				int n = reader.read(buffer);
-				log.debug("read = {}", n);
 				if(n == -1) break;
 				writer.write(buffer, 0, n);
 			}
