@@ -69,7 +69,8 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 		
 		//check elapsed time
 		long start = System.currentTimeMillis();
-		String result = runner.byProcessBuilderOnDelete(command, resultVO.getClassName());
+//		String result = runner.byProcessBuilderOnDelete(command, resultVO.getClassName());
+		String result = runner.byProcessBuilder(command);
 		long finish = System.currentTimeMillis();
 		resultVO.setResult(result);
 		resultVO.setExecuteElapsed(finish - start);
