@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,8 @@ public class ProcessRunner {
 		ProcessBuilder builder = new ProcessBuilder(command);
 		builder.directory(baseDirectory);
 		Process process = builder.start();
+		log.debug("builder path = {}", builder.directory().getAbsolutePath());
+		log.debug("command = {}", Arrays.deepToString(command));
 		return printStream(process);
 	}
 	
