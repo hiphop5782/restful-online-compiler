@@ -13,6 +13,9 @@ import com.hacademy.runner.entity.JavaSourceVO;
 import com.hacademy.runner.exception.CodeCompileException;
 import com.hacademy.runner.service.JavaCompileService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/java")
 public class JavaCompileController {
@@ -22,11 +25,13 @@ public class JavaCompileController {
 	
 	@PostMapping("/simple")
 	public String compileWithoutMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
+		log.info("/simple request : {}", sourceVO);
 		return javaCompileService.compileAndExecuteWithoutMainMethod(sourceVO);
 	}
 
 	@PostMapping("/main")
 	public String compileWithMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
+		log.info("/main request : {}", sourceVO);
 		return javaCompileService.compileAndExecuteWithMainMethod(sourceVO);
 	}
 }
