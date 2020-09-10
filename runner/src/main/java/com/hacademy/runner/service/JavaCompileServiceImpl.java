@@ -105,7 +105,7 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 		List<? extends JavaFileObject> srcList = List.of(new JavaSourceCodeObject(className, sourceVO.getCode()));
 		
 		//compile option list
-		List<String> options = List.of("-d", "./src/main/resources/compile");
+		List<String> options = List.of("-d", runner.getBaseDirectory().getAbsolutePath());
 		
 		//compile task
 		LocalDateTime compileTime = LocalDateTime.now();

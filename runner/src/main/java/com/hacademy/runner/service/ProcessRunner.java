@@ -15,7 +15,7 @@ import lombok.Getter;
 @Component
 public class ProcessRunner {
 	@Getter
-	private final File baseDirectory = new File("src/main/resources/compile");
+	private final File baseDirectory = new File("D:/temp-compile");
 	
 	public String byRuntime(String[] command) throws IOException, InterruptedException {
 		Runtime runtime = Runtime.getRuntime();
