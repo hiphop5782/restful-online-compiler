@@ -27,12 +27,16 @@ public class JavaCompileController {
 	@PostMapping("/simple")
 	public JavaResultVO compileWithoutMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		log.info("/simple request : {}", sourceVO);
-		return javaCompileService.compileAndExecuteWithoutMainMethod(sourceVO);
+		JavaResultVO resultVO = javaCompileService.compileAndExecuteWithoutMainMethod(sourceVO);
+		log.info("/simple response : {}", resultVO);
+		return resultVO;
 	}
 
 	@PostMapping("/main")
 	public JavaResultVO compileWithMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		log.info("/main request : {}", sourceVO);
-		return javaCompileService.compileAndExecuteWithMainMethod(sourceVO);
+		JavaResultVO resultVO = javaCompileService.compileAndExecuteWithMainMethod(sourceVO);
+		log.info("/main response : {}", resultVO);
+		return resultVO;
 	}
 }
