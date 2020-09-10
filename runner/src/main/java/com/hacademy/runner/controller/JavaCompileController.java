@@ -24,7 +24,7 @@ public class JavaCompileController {
 	@Autowired
 	private JavaCompileService javaCompileService;
 	
-	@PostMapping("/simple")
+	@PostMapping(value="/simple", produces = "application/json; charset=UTF-8")
 	public JavaResultVO compileWithoutMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		log.debug("/simple request : {}", sourceVO);
 		JavaResultVO resultVO = javaCompileService.compileAndExecuteWithoutMainMethod(sourceVO);
@@ -32,7 +32,7 @@ public class JavaCompileController {
 		return resultVO;
 	}
 
-	@PostMapping("/main")
+	@PostMapping(value="/main", produces = "application/json; charset=UTF-8")
 	public JavaResultVO compileWithMain(@RequestBody JavaSourceVO sourceVO) throws IOException, InterruptedException, CodeCompileException {
 		log.debug("/main request : {}", sourceVO);
 		JavaResultVO resultVO = javaCompileService.compileAndExecuteWithMainMethod(sourceVO);
