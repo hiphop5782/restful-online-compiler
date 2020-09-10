@@ -44,6 +44,7 @@ public class ProcessRunner {
 
 	private String printStream(Process process) throws IOException, InterruptedException {
 		process.waitFor();
+		log.debug("process exit value = {}", process.exitValue());
 		StringWriter writer = new StringWriter();
 		try (InputStream psout = process.getInputStream()) {
 			copy(psout, writer);
