@@ -11,7 +11,9 @@ import java.io.StringWriter;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class ProcessRunner {
 	@Getter
@@ -43,6 +45,7 @@ public class ProcessRunner {
 		try (InputStream psout = process.getInputStream()) {
 			copy(psout, writer);
 		}
+		log.debug("printStream = {}", writer.toString());
 		return writer.toString();
 	}
 
