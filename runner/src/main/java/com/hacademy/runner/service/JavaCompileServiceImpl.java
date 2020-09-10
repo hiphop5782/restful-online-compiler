@@ -62,6 +62,7 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 	@Override
 	public JavaResultVO execute(JavaResultVO resultVO) throws IOException, InterruptedException {
 		String javaHome = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java.exe";
+		log.info("javaHome = {}", javaHome);
 		String[] command = new String[] {javaHome, resultVO.getClassName()};
 		
 		//check time
