@@ -20,7 +20,11 @@ public class ProcessRunner {
 	public static final int SUCCESS = 0;
 	
 	@Getter
-	private final File baseDirectory = new File("D:/temp-compile");
+	private final File baseDirectory = new File("C:/temp-compile");
+	
+	@Getter
+	private final String baseEncoding = "UTF-8";
+	private final String MS949 = "MS949";
 	
 	public String byRuntime(String[] command) throws IOException, InterruptedException {
 		Runtime runtime = Runtime.getRuntime();
@@ -65,7 +69,7 @@ public class ProcessRunner {
 
 	public void copy(InputStream input, StringWriter writer) throws IOException {
 		char[] buffer = new char[1024];
-		try (Reader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"))) {
+		try (Reader reader = new BufferedReader(new InputStreamReader(input, MS949))) {
 			while (true) {
 				int n = reader.read(buffer);
 				if(n == -1) break;
