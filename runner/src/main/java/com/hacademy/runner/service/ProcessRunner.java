@@ -30,7 +30,7 @@ public class ProcessRunner {
 		ProcessBuilder builder = new ProcessBuilder(command);
 		builder.directory(baseDirectory);
 		Process process = builder.start();
-		log.debug("builder path = {}", builder.directory().getAbsolutePath());
+		log.debug("builder base dir = {}, {}", builder.directory().getAbsolutePath(), builder.directory().exists());
 		log.debug("command = {}", Arrays.deepToString(command));
 		return printStream(process);
 	}
