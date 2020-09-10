@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class ProcessRunner {
+	public static final int SUCCESS = 0;
+	
 	@Getter
 	private final File baseDirectory = new File("D:/temp-compile");
 	
@@ -46,8 +48,15 @@ public class ProcessRunner {
 		process.waitFor();
 		log.debug("process exit value = {}", process.exitValue());
 		StringWriter writer = new StringWriter();
-		try (InputStream psout = process.getInputStream()) {
-			copy(psout, writer);
+		if(process.exitValue() == SUCCESS) {
+			try (InputStream psout = process.getInputStream()) {
+				copy(psout, writer);
+			}
+		}
+		else {
+			try(InputStream pserr = process.getErrorStream()){
+				copy(pserr, writer);
+			}
 		}
 		log.debug("printStream = {}", writer.toString());
 		return writer.toString();
