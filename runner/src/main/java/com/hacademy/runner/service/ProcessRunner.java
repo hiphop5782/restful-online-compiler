@@ -20,7 +20,7 @@ public class ProcessRunner {
 	public static final int SUCCESS = 0;
 	
 	@Getter
-	private final File baseDirectory = new File("C:/temp-compile");
+	private final File baseDirectory = new File(System.getProperty("user.home")+"/runner-temp-compile");
 	
 	@Getter
 	private final String baseEncoding = "UTF-8";
