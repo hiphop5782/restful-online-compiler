@@ -11,9 +11,6 @@ spring:
     show-sql: true
 
 logging:
-  file:
-    path: D:/temp-compile
-    name: app.log
   level:
     com.hacademy.runner: debug
 

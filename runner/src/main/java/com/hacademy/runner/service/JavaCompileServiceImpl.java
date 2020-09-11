@@ -65,7 +65,16 @@ public class JavaCompileServiceImpl implements JavaCompileService{
 //		String javaHome = "java.exe";
 		log.debug("javaHome = {}", javaHome);
 		
-		String[] command = new String[] {javaHome, "-cp", ".", resultVO.getClassName()};
+		String[] command = new String[] {
+				javaHome, 
+				"-cp", 
+				".", 
+				"-Xms64m", 
+				"-Xmx128m", 
+				"-Djava.security.manager",
+				"-Djava.security.policy=../runner.policy",
+				resultVO.getClassName()
+		};
 		
 		//check time
 		resultVO.setExecuteTime(LocalDateTime.now());
